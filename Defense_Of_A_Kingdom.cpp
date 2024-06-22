@@ -24,12 +24,11 @@ int32_t main()
             wid.push_back(wd);
             hei.push_back(ht);
         }
+        wid.push_back(w + 1);
+        hei.push_back(h + 1);
 
         sort(wid.begin(), wid.end());
         sort(hei.begin(), hei.end());
-
-        wid.push_back(w);
-        hei.push_back(h);
 
         int maxw = 0, maxh = 0;
 
