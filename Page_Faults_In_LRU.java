@@ -1,21 +1,55 @@
-Deque<Integer> deque = new ArrayDeque<>();
-        int count = 0;
 
-        for (int i = 0; i < N; i++) {
-            if (deque.contains(pages[i])) {
-                // If page is already in the deque, remove it and add it to the end (most recently used)
-                deque.remove(pages[i]);
-                deque.addLast(pages[i]);
-            } else {
-                // Page fault occurs
-                count++;
-                if (deque.size() == C) {
-                    // If deque is full, remove the least recently used page
-                    deque.removeFirst();
-                }
-                // Add the new page to the deque
-                deque.addLast(pages[i]);
+class Solution{
+    
+    static boolean next;
+    
+    public static int index_helper(int[] queue, int[] last_used, int page){
+
+        int ret_idx = 0;
+
+        for(int i = 0;i<queue.length;i++){
+
+            if(queue[i] == page){
+                next = true;
+                return i;
+            }else if(queue[i] == -1){
+                next = false;
+                return i;
+            }
+
+            if(last_used[ret_idx] > last_used[i]){
+                ret_idx = i;
             }
         }
+        return ret_idx;
+    }
 
-        return count;
+    static int pageFaults(int N, int C, int[] pages){
+        // code here
+        int[] queue = new int[C];
+        int[] last_used = new int[C];
+
+        Arrays.fill(queue, -1);
+        int ptr = 0;
+
+        int total_page_fault = 0;
+        int count = 0;
+
+        for(int i : pages){
+            next = false;
+            ptr = index_helper(queue, last_used, i);
+
+            if (!next) {
+                total_page_fault++;
+
+                queue[ptr] = i;
+            }
+
+            last_used[ptr] = count;
+
+            count++;
+        }
+        return total_page_fault;
+    }
+}
+

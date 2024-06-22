@@ -1,26 +1,36 @@
-deque<int> dq;
-
-int ans = 0;
-
-for (int i = 0; i < N; i++)
+int pageFaults(int N, int C, int pages[])
 {
-    auto it = find(dq.begin(), dq.end(), pages[i]);
 
-    if (it == dq.end())
+    deque<int> dq;
+
+    int pf = 0;
+
+    for (int i = 0; i < N; i++)
     {
-        ans++;
-
-        if (dq.size() == C)
+        auto it = find(dq.begin(), dq.end(), pages[i]);
+        if (it != dq.end())
         {
-            dq.pop_front();
+            dq.erase(it);
         }
-    }
-    else
-    {
-        dq.erase(it);
+        else
+        {
+            if (dq.size() >= C)
+            {
+                dq.pop_front();
+            }
+            pf++;
+        }
+        dq.push_back(pages[i]);
     }
 
-    dq.push_back(pages[i]);
+    return pf;
 }
 
-return ans;
+int32_t main()
+{
+    int N = 9, C = 4;
+
+    vector<int> pages{5, 0, 1, 3, 2, 4, 1, 0, 5};
+
+    cout << pageFaults(N, C, pages.data()) << endl;
+}
