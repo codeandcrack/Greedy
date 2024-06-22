@@ -1,57 +1,26 @@
-bool find(vector<int> &vec, int num)
+deque<int> dq;
+
+int ans = 0;
+
+for (int i = 0; i < N; i++)
 {
-    for (int i = 0; i < vec.size(); i++)
+    auto it = find(dq.begin(), dq.end(), pages[i]);
+
+    if (it == dq.end())
     {
-        if (vec[i] == num)
+        ans++;
+
+        if (dq.size() == C)
         {
-            return true;
+            dq.pop_front();
         }
     }
-
-    return false;
-}
-void erase(vector<int> &vec, int num)
-{
-    int idx = 0;
-
-    for (int i = 0; i < vec.size(); i++)
+    else
     {
-        if (vec[i] == num)
-        {
-            idx = i;
-            break;
-        }
+        dq.erase(it);
     }
 
-    vec.erase(vec.begin() + idx);
-    return;
+    dq.push_back(pages[i]);
 }
-int pageFaults(int N, int C, int pages[])
-{
 
-    vector<int> vec;
-
-    int ans = 0;
-
-    for (int i = 0; i < N; i++)
-    {
-        bool finder = find(vec, pages[i]);
-
-        if (finder)
-        {
-            erase(vec, pages[i]);
-        }
-        else
-        {
-            if (vec.size() >= C)
-            {
-                vec.erase(vec.begin());
-            }
-
-            ans++;
-        }
-        vec.push_back(pages[i]);
-    }
-
-    return ans;
-}
+return ans;
